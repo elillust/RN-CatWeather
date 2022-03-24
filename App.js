@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 
 export default function App() {
   return (
@@ -9,16 +9,34 @@ export default function App() {
       <View style={styles.city}>
         <Text style={styles.cityName}>Seoul</Text>
       </View>
-      <View style={styles.weather}>
+      <ScrollView 
+        pagingEnabled
+        horizontal 
+        contentContainerStyle={styles.weather}>
         <View style={styles.day}>
           <Text style={styles.temp}>27</Text>
           <Text style={styles.description}>Sunny</Text>
         </View>
-      </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>Sunny</Text>
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>Sunny</Text>
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>27</Text>
+          <Text style={styles.description}>Sunny</Text>
+        </View>
+      </ScrollView>
+
     </View>
   );
 }
 
+// const SCREEN_WIDTH = Dimensions.get('window').width;
+const {width:SCREEN_WIDTH} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex:1, 
@@ -28,7 +46,8 @@ const styles = StyleSheet.create({
     flex: 1, 
     justifyContent: "center",
     alignItems: "center",
-    
+    borderBottomColor: "#fff",
+    borderBottomWidth: 0.5,
   },
   cityName: {
     paddingTop:40,
@@ -37,12 +56,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   weather: {
-    flex: 3,
-  },
+    
+  }, 
   day: {
-    flex: 1,
-    borderTopColor: "#fff",
-    borderTopWidth: 0.5,
+    width: SCREEN_WIDTH,
     paddingLeft:30,
   },
   temp: {
