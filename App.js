@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 
 export default function App() {
-  return (
+  return ( 
     <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.city}>
@@ -11,6 +11,7 @@ export default function App() {
       </View>
       <ScrollView 
         pagingEnabled
+        showsHorizontalScrollIndicator={false}
         horizontal 
         contentContainerStyle={styles.weather}>
         <View style={styles.day}>
@@ -43,11 +44,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ef4056",
   },
   city: {
-    flex: 1, 
+    flex: 0.8, 
+    marginLeft: 30,
+    marginRight: 30,
     justifyContent: "center",
     alignItems: "center",
-    borderBottomColor: "#fff",
-    borderBottomWidth: 0.5,
+    borderBottomColor: "#000",
+    borderBottomWidth: 3,
   },
   cityName: {
     paddingTop:40,
