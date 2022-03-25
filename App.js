@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { ActivityIndicator, View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
@@ -26,9 +26,9 @@ export default function App() {
       {useGoogleMaps:false}
     );
     setCity(cN[0].city);
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY }`);
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY }&units=metric`);
     const json = await response.json();  
-    // setDay(json.daily); 
+    setDay(json.daily); 
 
   };
   useEffect(() => {
@@ -46,7 +46,18 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
         horizontal 
         contentContainerStyle={styles.weather}>
-        {day.length === 0 ? "" : <View style={styles.day}></View>}
+        {day.length === 0 ? (
+          <View style={styles.day}>
+            <ActivityIndicator color="white" size="large" style={{ marginTop:200 }} />
+          </View> 
+         ) : ( 
+           day.map((day, index) => 
+           <View key={index} style={styles.day}>
+            <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+            <Text style={styles.description}>{day.weather[0].main}</Text>
+           </View> 
+           )
+         )}
       </ScrollView>
 
     </View>
