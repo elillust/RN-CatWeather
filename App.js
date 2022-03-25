@@ -3,23 +3,33 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 
+const {width:SCREEN_WIDTH} = Dimensions.get('window');
+const API_KEY = "1839b4273e03af1ed30b8438b0e04f17";
+
 export default function App() {
   const [city, setCity] = useState("Loading..."); 
+  const [day, setDay] = useState([]); 
   const [location, setLocation] = useState(null);
   const [ok, setOk] = useState(true); 
 
   const ask = async () => {
+    // 위치사용 동의 얻기!!! 
     const {granted} = await Location.requestForegroundPermissionsAsync();
     if(!granted){
       setOk(false); 
       console.log("false");
     }
-    const {coords:{latitude, longitude}} = await Location.getCurrentPositionAsync({accuracy:6});
+    // 현재 위치를 가지고 온다 -> accuracy:6 정확도 1-6
+    const {coords:{latitude, longitude}} = await Location.getCurrentPositionAsync({accuracy:6}); 
     const cN = await Location.reverseGeocodeAsync(
       {latitude, longitude},  
       {useGoogleMaps:false}
     );
     setCity(cN[0].city);
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY }`);
+    const json = await response.json();  
+    // setDay(json.daily); 
+
   };
   useEffect(() => {
     ask();
@@ -36,22 +46,7 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
         horizontal 
         contentContainerStyle={styles.weather}>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
+        {day.length === 0 ? "" : <View style={styles.day}></View>}
       </ScrollView>
 
     </View>
@@ -59,7 +54,7 @@ export default function App() {
 }
 
 // const SCREEN_WIDTH = Dimensions.get('window').width;
-const {width:SCREEN_WIDTH} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     flex:1, 
