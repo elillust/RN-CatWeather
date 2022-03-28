@@ -2,10 +2,16 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
+import { Ionicons, Fontisto } from '@expo/vector-icons';
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
 const API_KEY = "1839b4273e03af1ed30b8438b0e04f17";
 
+const icons = {
+  Clear: "day-sunny",
+  Rain: "rain",
+  Clouds: "cloudy",
+}
 export default function App() {
   const [city, setCity] = useState("Loading..."); 
   const [day, setDay] = useState([]); 
@@ -47,13 +53,16 @@ export default function App() {
         horizontal 
         contentContainerStyle={styles.weather}>
         {day.length === 0 ? (
-          <View style={styles.day}>
+          <View style={{ ...styles.day, alignItems: "center" }}>
             <ActivityIndicator color="white" size="large" style={{ marginTop:200 }} />
           </View> 
          ) : ( 
            day.map((day, index) => 
            <View key={index} style={styles.day}>
-            <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+              <Fontisto name={icons[day.weather[0].main]} size={54} color="white" />
+            </View>
             <Text style={styles.description}>{day.weather[0].main}</Text>
            </View> 
            )
